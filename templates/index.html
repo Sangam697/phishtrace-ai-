@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PhishTrace AI — Phishing Domain &amp; Threat Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body>
+    <!-- Subtle cyber background grid & radial glows -->
+    <div class="cyber-grid-bg"></div>
+    <div class="bg-glow bg-glow-cyan"></div>
+    <div class="bg-glow bg-glow-crimson"></div>
+
+    <!-- Top Navigation Bar (Matches PhishTrace AI Screenshot) -->
+    <header class="pt-navbar">
+        <div class="pt-container pt-nav-inner">
+            <a href="#" id="brandHomeLink" class="pt-logo">
+                <svg class="pt-logo-icon" viewBox="0 0 32 32" fill="none">
+                    <path d="M12 6L22 16L12 26L2 16L12 6Z" stroke="#22d3ee" stroke-width="2.2" stroke-linejoin="round"/>
+                    <path d="M20 6L30 16L20 26L10 16L20 6Z" stroke="#06b6d4" stroke-width="2.2" stroke-linejoin="round" opacity="0.85"/>
+                </svg>
+                <span class="pt-logo-text">PhishTrace AI</span>
+            </a>
+
+            <div class="pt-nav-pills">
+                <button type="button" id="navOverviewBtn" class="pt-nav-pill active">DOMAIN INTELLIGENCE</button>
+                <button type="button" id="navDeepReportBtn" class="pt-nav-pill">AI THREAT DETECTION</button>
+                <button type="button" id="toggleBulkBtn" class="pt-nav-pill">BATCH SCANNER</button>
+                <div class="pt-nav-pill pt-status-pill">
+                    <span class="pt-green-dot"></span>
+                    <span>Monitoring Engine Online</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Toast Notification Banner (top right) -->
+    <div id="toastNotification" class="pt-toast hidden"></div>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 1: PHISHTRACE AI HERO LANDING DASHBOARD (Matches Screenshot)     -->
+    <!-- ===================================================================== -->
+    <main id="heroDashboardView" class="pt-container pt-hero-view">
+        <section class="pt-hero-grid">
+            <!-- Left Column: Giant Headline + Search Bar + Capability Tags -->
+            <div class="pt-hero-left">
+                <h1 class="pt-hero-title">
+                    <span class="pt-title-solid-top">Trace every</span>
+                    <span class="pt-title-outline">phishing</span>
+                    <span class="pt-title-solid">domain.</span>
+                </h1>
+
+                <p class="pt-hero-desc">
+                    Detect suspicious domains, discover related subdomains, identify lookalike infrastructure
+                    and continuously monitor phishing indicators using AI-assisted threat intelligence.
+                </p>
+
+                <form id="heroScanForm" class="pt-search-bar">
+                    <input
+                        type="text"
+                        id="domainInput"
+                        placeholder="Enter domain or URL (e.g. paypa1-secure-login.xyz, instagram.com)..."
+                        value="paypa1-secure-login.xyz"
+                        autocomplete="off"
+                        required
+                    />
+                    <button type="submit" id="scanBtn" class="pt-analyze-btn">
+                        <span id="scanBtnText">Analyze Domain</span>
+                        <span id="scanSpinner" class="spinner-dark hidden"></span>
+                    </button>
+                </form>
+
+                <!-- Feature Capability Pills -->
+                <div class="pt-feature-tags">
+                    <span class="pt-tag">AI Detection</span>
+                    <span class="pt-tag">Subdomain Discovery</span>
+                    <span class="pt-tag">Lookalike Detection</span>
+                    <span class="pt-tag">DNS Intelligence</span>
+                    <span class="pt-tag">Risk Scoring</span>
+                    <span class="pt-tag">Continuous Tracking</span>
+                </div>
+
+                <!-- Quick Test Presets -->
+                <div class="pt-sample-row">
+                    <span class="pt-sample-label">Quick Try:</span>
+                    <button type="button" class="pt-sample-chip" data-sample="paypa1-secure-login.xyz">paypa1-secure-login.xyz</button>
+                    <button type="button" class="pt-sample-chip" data-sample="xn--pple-43d.com">xn--pple-43d.com</button>
+                    <button type="button" class="pt-sample-chip" data-sample="microsoft-office365-account-verify.top">microsoft-office365...top</button>
+                    <button type="button" class="pt-sample-chip" data-sample="instagram.com">instagram.com</button>
+                    <button type="button" class="pt-sample-chip" data-sample="github.com">github.com</button>
+                </div>
+            </div>
+
+            <!-- Right Column: Concentric Radar Graphic & Floating AI Signal Cards -->
+            <div class="pt-hero-right">
+                <div class="pt-radar-wrapper">
+                    <!-- Floating Top-Right Card: AI Confidence -->
+                    <div class="pt-float-card pt-float-confidence">
+                        <div class="pt-float-row">
+                            <span class="pt-float-label">AI confidence</span>
+                            <span id="heroConfidenceVal" class="pt-float-green">96.8%</span>
+                        </div>
+                        <div class="pt-mini-bar">
+                            <div id="heroConfidenceBar" class="pt-mini-fill-green" style="width: 96.8%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Concentric Radar Circles -->
+                    <div class="pt-radar-circle pt-ring-outer">
+                        <span class="pt-orbit-dot pt-dot-left"></span>
+                        <span class="pt-orbit-dot pt-dot-right"></span>
+                        <span class="pt-orbit-dot pt-dot-bottom"></span>
+                    </div>
+                    <div class="pt-radar-circle pt-ring-mid"></div>
+                    <div class="pt-radar-circle pt-ring-inner"></div>
+
+                    <!-- Center Glowing Checkmark Core -->
+                    <div class="pt-radar-core">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+
+                    <!-- Floating Bottom-Left Card: Current Threat Signal -->
+                    <div class="pt-float-card pt-float-threat">
+                        <div class="pt-threat-kicker">CURRENT THREAT SIGNAL</div>
+                        <div id="heroThreatLevel" class="pt-threat-big">HIGH</div>
+                        <div class="pt-float-row">
+                            <span class="pt-float-label">Phishing probability</span>
+                            <span id="heroPhishProb" class="pt-float-red">78%</span>
+                        </div>
+                        <div class="pt-mini-bar">
+                            <div id="heroPhishBar" class="pt-mini-fill-red" style="width: 78%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bottom Preview Card: AI DOMAIN ANALYSIS (Matches Screenshot) -->
+        <section class="pt-summary-banner" id="heroSummaryCard">
+            <div class="pt-summary-top">
+                <div>
+                    <div class="pt-summary-kicker">AI DOMAIN ANALYSIS</div>
+                    <div id="heroSummaryDomain" class="pt-summary-domain">paypa1-secure-login.xyz</div>
+                </div>
+                <div class="pt-summary-actions">
+                    <span id="heroSummaryStatusPill" class="pt-infra-pill pt-infra-danger">
+                        Suspicious infrastructure detected
+                    </span>
+                    <button type="button" id="openFullReportBtn" class="pt-open-report-btn">
+                        View Deep Analysis &rarr;
+                    </button>
+                </div>
+            </div>
+
+            <div class="pt-summary-metrics">
+                <div class="pt-metric-box">
+                    <span class="pt-metric-label">RISK SCORE</span>
+                    <span id="heroMetricRisk" class="pt-metric-value pt-val-danger">88 / 100</span>
+                </div>
+                <div class="pt-metric-box">
+                    <span class="pt-metric-label">SUBDOMAINS</span>
+                    <span id="heroMetricSubdomains" class="pt-metric-value">12</span>
+                </div>
+                <div class="pt-metric-box">
+                    <span class="pt-metric-label">LOOKALIKES</span>
+                    <span id="heroMetricLookalikes" class="pt-metric-value">14</span>
+                </div>
+                <div class="pt-metric-box">
+                    <span class="pt-metric-label">THREAT SIGNALS</span>
+                    <span id="heroMetricSignals" class="pt-metric-value">9</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 2: DEEP ANALYSIS & TELEMETRY FILES VIEW (Shown after analyzing)  -->
+    <!-- ===================================================================== -->
+    <main id="deepAnalysisView" class="pt-container main-content hidden">
+        <!-- Deep View Top Action Bar & Quick Re-Scan -->
+        <div class="deep-topbar">
+            <button type="button" id="backToHeroBtn" class="btn btn-secondary btn-sm">
+                &larr; Back to PhishTrace Overview
+            </button>
+
+            <form id="deepScanForm" class="deep-inline-form">
+                <input
+                    type="text"
+                    id="deepDomainInput"
+                    placeholder="Analyze another domain or URL..."
+                    autocomplete="off"
+                />
+                <label class="checkbox-toggle">
+                    <input type="checkbox" id="deepNetworkToggle" checked />
+                    <span>Live DNS/SSL/WHOIS</span>
+                </label>
+                <button type="submit" id="deepScanBtn" class="pt-analyze-btn pt-analyze-btn-sm">
+                    Analyze Domain
+                </button>
+            </form>
+        </div>
+
+        <!-- Summary Banner inside Deep View (Matches PhishTrace AI Screenshot) -->
+        <section class="pt-summary-banner">
+            <div class="pt-summary-top">
+                <div>
+                    <div class="pt-summary-kicker">AI DOMAIN ANALYSIS</div>
+                    <div id="deepSummaryDomain" class="pt-summary-domain">example.com</div>
+                </div>
+                <span id="deepSummaryStatusPill" class="pt-infra-pill pt-infra-danger">
+                    Suspicious infrastructure detected
+                </span>
+            </div>
+            <div class="pt-summary-metrics">
+                <div class="pt-metric-box">
+                    <span class="pt-metric-label">RISK SCORE</span>
+                    <span id="deepMetricRisk" class="pt-metric-value pt-val-danger">0 / 100</span>
+                </div>
+                <div class="pt-metric-box">
+                    <span class="pt-metric-label">SUBDOMAINS</span>
+                    <span id="deepMetricSubdomains" class="pt-metric-value">0</span>
+                </div>
+                <div class="pt-metric-box">
+                    <span class="pt-metric-label">LOOKALIKES</span>
+                    <span id="deepMetricLookalikes" class="pt-metric-value">0</span>
+                </div>
+                <div class="pt-metric-box">
+                    <span class="pt-metric-label">THREAT SIGNALS</span>
+                    <span id="deepMetricSignals" class="pt-metric-value">0</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Collapsible Batch Scanner Panel -->
+        <section id="bulkScannerSection" class="card bulk-section hidden">
+            <div class="card-header-row">
+                <div>
+                    <h2>Batch Domain / URL Scanner</h2>
+                    <p class="text-muted">Enter up to 25 domains or URLs (one per line) for rapid multi-domain threat triage.</p>
+                </div>
+                <button type="button" id="closeBulkBtn" class="btn btn-ghost btn-sm">Close</button>
+            </div>
+            <textarea id="bulkTextarea" rows="5" class="bulk-textarea" placeholder="paypa1-login-verify.xyz&#10;apple-icloud-unlock.top&#10;microsoft.com&#10;arnazon-prime-billing.icu"></textarea>
+            <div class="bulk-actions">
+                <button type="button" id="runBulkBtn" class="btn btn-primary">Run Batch Scan</button>
+                <button type="button" id="fillSampleBulkBtn" class="btn btn-secondary">Load Sample Batch</button>
+            </div>
+            <div id="bulkResultsContainer" class="bulk-results hidden"></div>
+        </section>
+
+        <!-- Deep Scan Telemetry Grid -->
+        <div id="resultsContainer" class="results-container">
+            <!-- Top Row: Risk Gauge + AI Threat Analyst Report -->
+            <div class="top-results-grid">
+                <!-- Risk Score Gauge Card -->
+                <div class="card risk-gauge-card">
+                    <div class="card-kicker">COMPOSITE THREAT SCORE</div>
+                    <div class="gauge-container">
+                        <svg class="risk-gauge-svg" viewBox="0 0 200 125">
+                            <path class="gauge-bg" d="M 20 105 A 80 80 0 0 1 180 105" fill="none" stroke-width="16" stroke-linecap="round"/>
+                            <path id="gaugeArc" class="gauge-fill" d="M 20 105 A 80 80 0 0 1 180 105" fill="none" stroke-width="16" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="251.2"/>
+                        </svg>
+                        <div class="gauge-center-text">
+                            <div id="overallScoreValue" class="gauge-number">0</div>
+                            <div class="gauge-max">/ 100</div>
+                        </div>
+                    </div>
+
+                    <div id="verdictBadge" class="verdict-badge">LIKELY SAFE</div>
+                    <div id="scannedDomainLabel" class="scanned-domain-mono">example.com</div>
+                    <div id="scanDurationLabel" class="scan-meta-sub">Scanned in 0 ms</div>
+
+                    <div class="subscore-list">
+                        <div class="subscore-item">
+                            <div class="subscore-head">
+                                <span>ML Classifier Probability</span>
+                                <span id="subMlScore" class="mono-val">0%</span>
+                            </div>
+                            <div class="progress-track"><div id="barMl" class="progress-fill"></div></div>
+                        </div>
+                        <div class="subscore-item">
+                            <div class="subscore-head">
+                                <span>Brand &amp; Homoglyph Risk</span>
+                                <span id="subBrandScore" class="mono-val">0/100</span>
+                            </div>
+                            <div class="progress-track"><div id="barBrand" class="progress-fill"></div></div>
+                        </div>
+                        <div class="subscore-item">
+                            <div class="subscore-head">
+                                <span>Lexical &amp; URL Heuristics</span>
+                                <span id="subLexicalScore" class="mono-val">0/100</span>
+                            </div>
+                            <div class="progress-track"><div id="barLexical" class="progress-fill"></div></div>
+                        </div>
+                        <div class="subscore-item">
+                            <div class="subscore-head">
+                                <span>Network Infrastructure Risk</span>
+                                <span id="subNetworkScore" class="mono-val">0/100</span>
+                            </div>
+                            <div class="progress-track"><div id="barNetwork" class="progress-fill"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Threat Analyst Report Card -->
+                <div class="card ai-report-card">
+                    <div class="ai-card-header">
+                        <div>
+                            <div class="card-kicker">AI SECURITY ANALYST ASSESSMENT</div>
+                            <h2 id="aiThreatCategory">Threat Intelligence Report</h2>
+                        </div>
+                        <div class="ai-header-right">
+                            <span id="aiEngineBadge" class="badge badge-ai">PhishTrace Hybrid AI</span>
+                            <button id="exportJsonBtn" class="btn btn-secondary btn-sm" type="button">Export JSON</button>
+                        </div>
+                    </div>
+
+                    <div class="ai-summary-box">
+                        <p id="aiExecutiveSummary"></p>
+                    </div>
+
+                    <div class="ai-vector-section">
+                        <h3>Attack Vector &amp; Behavioral Analysis</h3>
+                        <p id="aiAttackVector"></p>
+                    </div>
+
+                    <div class="indicators-two-col">
+                        <div class="indicator-box indicator-box-risk">
+                            <h4>Key Risk Indicators</h4>
+                            <ul id="aiRiskIndicatorsList" class="indicator-list"></ul>
+                        </div>
+                        <div class="indicator-box indicator-box-trust">
+                            <h4>Trust &amp; Verification Signals</h4>
+                            <ul id="aiTrustIndicatorsList" class="indicator-list"></ul>
+                        </div>
+                    </div>
+
+                    <div class="remediation-box">
+                        <h4>Recommended SOC &amp; Defensive Actions</h4>
+                        <ul id="aiActionsList" class="action-list"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Middle Row: Brand/Homoglyph Detection + Explainable ML Feature Impact -->
+            <div class="details-two-col">
+                <div class="card">
+                    <div class="panel-title-row">
+                        <h3>Brand Impersonation &amp; Lookalike Inspector</h3>
+                        <span id="brandStatusBadge" class="badge">Clean</span>
+                    </div>
+                    <div id="brandMatchesContainer" class="brand-matches-area"></div>
+                    <div class="signals-subbox">
+                        <h4>Detection Telemetry</h4>
+                        <ul id="brandSignalsList" class="signal-bullets"></ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="panel-title-row">
+                        <h3>Explainable ML (XAI) Feature Contributions</h3>
+                        <span id="mlModelBadge" class="badge badge-neutral">Random Forest (14 Features)</span>
+                    </div>
+                    <p class="panel-desc">Top domain and infrastructure features driving the Machine Learning classification score:</p>
+                    <div id="xaiFeaturesList" class="xai-features-list"></div>
+                </div>
+            </div>
+
+            <!-- Bottom Row: Lexical Anatomy + Live DNS/SSL/WHOIS Inspector -->
+            <div class="details-two-col">
+                <div class="card">
+                    <div class="panel-title-row">
+                        <h3>Lexical &amp; URL Structure Anatomy</h3>
+                        <span id="lexicalScoreBadge" class="badge">0 / 100</span>
+                    </div>
+
+                    <div class="anatomy-segments" id="domainAnatomyBar"></div>
+
+                    <div class="metrics-mini-grid">
+                        <div class="metric-tile">
+                            <span class="m-label">Shannon Entropy</span>
+                            <span class="m-val" id="lexEntropy">0.00 bits</span>
+                        </div>
+                        <div class="metric-tile">
+                            <span class="m-label">Hostname Length</span>
+                            <span class="m-val" id="lexLength">0 chars</span>
+                        </div>
+                        <div class="metric-tile">
+                            <span class="m-label">Subdomain Levels</span>
+                            <span class="m-val" id="lexSubdomains">0</span>
+                        </div>
+                        <div class="metric-tile">
+                            <span class="m-label">Hyphens / Digits</span>
+                            <span class="m-val" id="lexHyphensDigits">0 / 0</span>
+                        </div>
+                        <div class="metric-tile">
+                            <span class="m-label">Digit Ratio</span>
+                            <span class="m-val" id="lexDigitRatio">0%</span>
+                        </div>
+                        <div class="metric-tile">
+                            <span class="m-label">TLD Reputation</span>
+                            <span class="m-val" id="lexTldStatus">.com</span>
+                        </div>
+                    </div>
+
+                    <div class="keywords-box">
+                        <h4>Suspicious Lure Keywords Detected</h4>
+                        <div id="lexKeywordsList" class="keyword-tags"></div>
+                    </div>
+
+                    <div class="signals-subbox">
+                        <h4>Lexical Heuristic Signals</h4>
+                        <ul id="lexicalSignalsList" class="signal-bullets"></ul>
+                    </div>
+                </div>
+
+                <!-- Live Network Inspector: WHOIS, SSL/TLS, DNS -->
+                <div class="card">
+                    <div class="panel-title-row">
+                        <h3>DNS, SSL/TLS &amp; WHOIS Infrastructure Inspector</h3>
+                        <span id="networkScoreBadge" class="badge">0 / 100</span>
+                    </div>
+
+                    <div class="net-tabs">
+                        <button type="button" class="net-tab active" data-tab="tabWhois">WHOIS &amp; Age</button>
+                        <button type="button" class="net-tab" data-tab="tabSsl">SSL / TLS Cert</button>
+                        <button type="button" class="net-tab" data-tab="tabDns">DNS &amp; Email Auth</button>
+                    </div>
+
+                    <div id="tabWhois" class="net-tab-content active">
+                        <div class="kv-grid" id="whoisKvGrid"></div>
+                    </div>
+
+                    <div id="tabSsl" class="net-tab-content">
+                        <div class="kv-grid" id="sslKvGrid"></div>
+                    </div>
+
+                    <div id="tabDns" class="net-tab-content">
+                        <div class="kv-grid" id="dnsKvGrid"></div>
+                    </div>
+
+                    <div class="signals-subbox">
+                        <h4>Infrastructure Signals</h4>
+                        <ul id="networkSignalsList" class="signal-bullets"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Scan History Table -->
+        <section class="card history-card">
+            <div class="card-header-row">
+                <div>
+                    <h2>Recent Threat Scan History</h2>
+                    <p class="text-muted">Click any previous scan to load its deep threat intelligence report.</p>
+                </div>
+                <div class="history-stats-inline">
+                    <span class="pill pill-safe">Total: <strong id="statTotal">0</strong></span>
+                    <span class="pill pill-danger">Malicious: <strong id="statMalicious">0</strong></span>
+                    <span class="pill pill-warn">Suspicious: <strong id="statSuspicious">0</strong></span>
+                    <span class="pill pill-safe">Safe: <strong id="statSafe">0</strong></span>
+                    <button id="clearHistoryBtn" class="btn btn-ghost btn-sm" type="button">Clear</button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Domain / Target</th>
+                            <th>Threat Category</th>
+                            <th>Risk Score</th>
+                            <th>Verdict</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        <tr>
+                            <td colspan="6" class="empty-row">No domains scanned yet.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bottom Footer (Matches PhishTrace AI Screenshot) -->
+    <footer class="pt-footer">
+        <div class="pt-container pt-footer-inner">
+            <span>PHISHTRACE AI &copy; 2026</span>
+            <div class="pt-footer-links">
+                <span>Threat Intelligence</span>
+                <span>Domain Monitoring</span>
+                <span>AI Detection</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
